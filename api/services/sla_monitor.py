@@ -31,3 +31,12 @@ class SLAMonitor:
         '''Automated SLA violation response'''
         # Implement corrective actions
         pass
+    async def get_slice_metrics(self, slice_id: str):
+        '''Get current slice performance metrics'''
+        # Implementation for fetching slice metrics
+        return {
+            'throughput': 850.5,  # Mbps
+            'latency': 12.3,      # ms
+            'packet_loss': 0.01,  # percentage
+            'availability': 99.95  # percentage
+        }
