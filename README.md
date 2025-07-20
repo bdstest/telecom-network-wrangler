@@ -52,16 +52,16 @@ Monitors performance of disaggregated RAN components including RU, DU, and CU wi
 ## 🔧 Advanced 5G Features
 
 **Dynamic Network Slicing**
-Monitors and adjusts network slice resources based on real-time demand. Automatically scales slice bandwidth and priority based on service requirements and traffic patterns.
+Manages slice resource allocation with real-time demand patterns. Balances slice isolation requirements against resource efficiency while monitoring performance impacts across all slice types to maintain service quality guarantees.
 
 **Spectrum Optimization Engine**
-Analyzes spectrum usage patterns and recommends carrier aggregation configurations, beam forming adjustments, and frequency reallocation to maximize efficiency.
+Analyzes spectrum usage patterns and recommends carrier aggregation configurations. Considers regulatory constraints and interference patterns when suggesting frequency reallocation strategies for maximum efficiency across deployment scenarios.
 
 **Edge Computing Integration**
 Tracks Multi-access Edge Computing (MEC) performance and automatically routes traffic to optimal edge nodes based on latency requirements and compute availability.
 
 **AI-Driven Performance Tuning**
-Machine learning algorithms identify optimization opportunities for antenna tilt, power levels, and handover parameters to improve overall network performance.
+Machine learning algorithms identify optimization opportunities for antenna tilt, power levels, and handover parameters. Continuously adapts to changing network conditions while balancing coverage, capacity, and power efficiency objectives across multiple optimization cycles.
 
 ## 🛠️ Technology Stack
 
