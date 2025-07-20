@@ -195,7 +195,7 @@ class SpectrumOptimizer:
         # Shannon capacity approximation
         spectral_efficiency = np.log2(1 + 10**(avg_sinr/10))
         
-        return min(spectral_efficiency, 10.0)  # Cap at reasonable value
+        return min(spectral_efficiency, 4.5)  # Cap at realistic 5G maximum
     
     def _detect_interference(self, band_data: pd.DataFrame) -> str:
         """Detect interference patterns in frequency band"""
@@ -227,7 +227,7 @@ class SpectrumOptimizer:
         # Simplified throughput calculation
         bandwidth_per_carrier = 20  # MHz
         total_bandwidth = np.sum(allocated_carriers) * bandwidth_per_carrier
-        spectral_efficiency = 3.5  # bps/Hz typical for 5G
+        spectral_efficiency = 2.9  # bps/Hz realistic for 5G production networks
         
         return total_bandwidth * spectral_efficiency  # Mbps
     

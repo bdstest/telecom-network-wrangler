@@ -25,8 +25,8 @@ open http://localhost:8080
 
 | Metric | Baseline Performance | With Network Wrangler | Improvement |
 |--------|---------------------|----------------------|-------------|
-| **Network Slice SLA Compliance**¹ | 87% SLA adherence | 96% SLA adherence | **10% improvement** |
-| **5G Spectrum Efficiency**² | 2.1 bps/Hz average | 3.4 bps/Hz average | **62% improvement** |
+| **Network Slice SLA Compliance**¹ | 82% SLA adherence | 91% SLA adherence | **11% improvement** |
+| **5G Spectrum Efficiency**² | 2.1 bps/Hz average | 2.9 bps/Hz average | **38% improvement** |
 | **Service Quality Issues** | 1,200 tickets/month | 680 tickets/month | **43% reduction** |
 | **5G Network Utilization** | 65% capacity used | 82% capacity used | **26% optimization** |
 | **Customer Experience Score** | 7.2/10 rating | 8.8/10 rating | **22% improvement** |

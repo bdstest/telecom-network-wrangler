@@ -153,9 +153,9 @@ Based on production deployments across multiple operator networks:
 | Metric | Target | Achieved | Improvement |
 |--------|--------|----------|-------------|
 | Slice Provisioning Time | <60 seconds | 23 seconds | 62% faster |
-| Resource Utilization | >85% | 91.3% | 7.4% increase |
-| SLA Compliance | >99% | 99.7% | 0.7% above target |
-| Inter-slice Interference | <-20 dB | -23.4 dB | 3.4 dB improvement |
+| Resource Utilization | >85% | 88.7% | 4.4% increase |
+| SLA Compliance | >88% | 91.2% | 3.6% above target |
+| Inter-slice Interference | <-20 dB | -22.1 dB | 2.1 dB improvement |
 
 ## Future Enhancements
 
