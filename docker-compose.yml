@@ -1,0 +1,227 @@
+version: '3.8'
+
+services:
+  # TimescaleDB for network time-series data
+  timescaledb:
+    image: timescale/timescaledb:2.11.2-pg15
+    container_name: telecom-wrangler-db
+    environment:
+      POSTGRES_DB: network_monitoring
+      POSTGRES_USER: telecom_user
+      POSTGRES_PASSWORD: 5G_network_2024!
+      TIMESCALEDB_TELEMETRY: 'off'
+    ports:
+      - "5432:5432"
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+      - ./config/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U telecom_user -d network_monitoring"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - telecom-network
+
+  # Redis for real-time caching and session management
+  redis:
+    image: redis:7.2-alpine
+    container_name: telecom-wrangler-redis
+    command: redis-server --requirepass "5G_cache_2024" --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - telecom-network
+
+  # FastAPI backend for network monitoring
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: telecom-wrangler-api
+    environment:
+      - DATABASE_URL=postgresql://telecom_user:5G_network_2024!@timescaledb:5432/network_monitoring
+      - REDIS_URL=redis://:5G_cache_2024@redis:6379/0
+      - SECRET_KEY=telecom_network_wrangler_secret_key_2024
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config:/app/config
+      - ./ml/models:/app/models
+      - network_logs:/app/logs
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - telecom-network
+
+  # Celery worker for background processing
+  worker:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: telecom-wrangler-worker
+    command: celery -A main.celery worker --loglevel=info --concurrency=4
+    environment:
+      - DATABASE_URL=postgresql://telecom_user:5G_network_2024!@timescaledb:5432/network_monitoring
+      - REDIS_URL=redis://:5G_cache_2024@redis:6379/0
+      - SECRET_KEY=telecom_network_wrangler_secret_key_2024
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./config:/app/config
+      - ./ml/models:/app/models
+      - network_logs:/app/logs
+    depends_on:
+      - timescaledb
+      - redis
+      - api
+    networks:
+      - telecom-network
+
+  # Celery beat scheduler for periodic tasks
+  scheduler:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: telecom-wrangler-scheduler
+    command: celery -A main.celery beat --loglevel=info --schedule=/tmp/celerybeat-schedule
+    environment:
+      - DATABASE_URL=postgresql://telecom_user:5G_network_2024!@timescaledb:5432/network_monitoring
+      - REDIS_URL=redis://:5G_cache_2024@redis:6379/0
+      - SECRET_KEY=telecom_network_wrangler_secret_key_2024
+    volumes:
+      - ./config:/app/config
+      - network_logs:/app/logs
+    depends_on:
+      - timescaledb
+      - redis
+      - api
+    networks:
+      - telecom-network
+
+  # React frontend for network operations dashboard
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: telecom-wrangler-frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080
+      - REACT_APP_WEBSOCKET_URL=ws://localhost:8080/ws
+      - REACT_APP_ENVIRONMENT=production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - telecom-network
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: telecom-wrangler-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/alerts:/etc/prometheus/alerts
+      - prometheus_data:/prometheus
+    networks:
+      - telecom-network
+
+  # Grafana for network monitoring dashboards
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: telecom-wrangler-grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=telecom_admin
+      - GF_SECURITY_ADMIN_PASSWORD=5G_grafana_2024
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-worldmap-panel,grafana-piechart-panel
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - prometheus
+    networks:
+      - telecom-network
+
+  # InfluxDB for high-frequency network measurements
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: telecom-wrangler-influxdb
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=telecom_user
+      - DOCKER_INFLUXDB_INIT_PASSWORD=5G_influx_2024
+      - DOCKER_INFLUXDB_INIT_ORG=telecom-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=network-metrics
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    networks:
+      - telecom-network
+
+  # NGINX reverse proxy for production deployment
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: telecom-wrangler-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - api
+      - frontend
+    networks:
+      - telecom-network
+
+networks:
+  telecom-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+volumes:
+  timescale_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  influxdb_data:
+    driver: local
+  network_logs:
+    driver: local
