@@ -11,13 +11,13 @@ class Settings(BaseSettings):
     """Application settings"""
     
     # Database
-    DATABASE_URL: str = "postgresql://telecom_user:5G_network_2024!@localhost:5432/network_monitoring"
+    DATABASE_URL: str = "postgresql://telecom_user:YOUR_POSTGRES_PASSWORD@localhost:5432/network_monitoring"
     
     # Redis
-    REDIS_URL: str = "redis://:5G_cache_2024@localhost:6379/0"
+    REDIS_URL: str = "redis://:YOUR_REDIS_PASSWORD@localhost:6379/0"
     
     # Security
-    SECRET_KEY: str = "telecom_network_wrangler_secret_key_2024"
+    SECRET_KEY: str = "YOUR_SECRET_KEY_HERE"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
@@ -56,7 +56,7 @@ class Settings(BaseSettings):
     
     # InfluxDB
     INFLUXDB_URL: str = "http://localhost:8086"
-    INFLUXDB_TOKEN: str = "telecom-influx-token-2024"
+    INFLUXDB_TOKEN: str = "YOUR_INFLUX_TOKEN_HERE"
     INFLUXDB_ORG: str = "telecom-org"
     INFLUXDB_BUCKET: str = "network-metrics"
     
