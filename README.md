@@ -187,7 +187,7 @@ celery -A api.main.celery worker --loglevel=info
 
 ## 📚 Documentation
 
-- [API Reference](docs/api.md)
+- [API Reference](docs/API.md)
 - [Network Integration Guide](docs/network-integration.md)
 - [Deployment Manual](docs/deployment.md)
 - [User Training Materials](docs/training.md)
