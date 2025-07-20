@@ -2,9 +2,9 @@
 
 ## New Features
 - Enhanced anomaly detection with root cause analysis
-- 6G readiness assessment tools
-- Advanced spectrum optimization algorithms
+- Advanced spectrum optimization algorithms for 4G/5G networks
 - Real-time network slice performance monitoring
+- Improved carrier aggregation optimization
 
 ## Performance Improvements
 - 40% reduction in API response times
