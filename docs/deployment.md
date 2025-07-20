@@ -301,9 +301,3 @@ redis-cli ping
 - Monitor disk space
 - Implement data retention policies
 
-## Support
-
-For deployment assistance:
-- Internal documentation: `/docs`
-- Technical support: operations@company.com
-- Emergency escalation: +1-800-SUPPORT

@@ -299,11 +299,6 @@ POST /api/v1/users
 - Vendor Technical Manuals
 - Industry Best Practices
 
-### Support Channels
-- **Help Desk**: +1-800-SUPPORT
-- **Training Team**: training@company.com
-- **Knowledge Base**: https://kb.company.com
-- **Community Forum**: https://forum.company.com
 
 ## Training Schedule Template
 
