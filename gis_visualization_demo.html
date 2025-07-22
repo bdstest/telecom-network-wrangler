@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telecom Network GIS Visualization - bdstest</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        #map { height: 600px; }
+        .info-panel {
+            padding: 15px;
+            background: #f4f4f4;
+            text-align: center;
+        }
+        .legend {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        .legend h4 { margin: 0 0 5px; }
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.8;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-panel">
+        <h1>🗺️ Telecom Network Wrangler - GIS Coverage Map</h1>
+        <p>5G/4G Network Site Locations and Coverage Areas in NYC</p>
+        <p><strong>Author:</strong> bdstest | <strong>Platform:</strong> Telecom Network Wrangler</p>
+    </div>
+    
+    <div id="map"></div>
+    
+    <script>
+        // Initialize map centered on NYC
+        var map = L.map('map').setView([40.7428, -73.9875], 12);
+        
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors | Telecom Network Wrangler by bdstest'
+        }).addTo(map);
+        
+        // Network site data
+        var networkSites = [
+            {
+                coords: [40.7128, -74.0059],
+                site_id: "NYC001",
+                generation: "5G",
+                signal: -75,
+                coverage_km: 2.1,
+                connections: 1247,
+                throughput: 1.2,
+                color: '#ff0000'
+            },
+            {
+                coords: [40.7484, -73.9857],
+                site_id: "NYC002", 
+                generation: "4G/5G",
+                signal: -82,
+                coverage_km: 3.8,
+                connections: 2156,
+                throughput: 0.8,
+                color: '#0080ff'
+            },
+            {
+                coords: [40.7831, -73.9712],
+                site_id: "NYC003",
+                generation: "5G",
+                signal: -70,
+                coverage_km: 2.5,
+                connections: 1850,
+                throughput: 1.5,
+                color: '#ff0000'
+            },
+            {
+                coords: [40.7589, -73.9851],
+                site_id: "NYC004",
+                generation: "4G",
+                signal: -85,
+                coverage_km: 4.2,
+                connections: 3200,
+                throughput: 0.5,
+                color: '#00ff00'
+            }
+        ];
+        
+        // Add coverage circles and markers for each site
+        networkSites.forEach(function(site) {
+            // Coverage area circle
+            var circle = L.circle(site.coords, {
+                color: site.color,
+                fillColor: site.color,
+                fillOpacity: 0.1,
+                radius: site.coverage_km * 1000, // Convert km to meters
+                weight: 2
+            }).addTo(map);
+            
+            // Site marker
+            var icon = L.divIcon({
+                html: '<div style="background-color:' + site.color + '; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.5);"></div>',
+                iconSize: [20, 20],
+                className: 'custom-div-icon'
+            });
+            
+            var marker = L.marker(site.coords, {icon: icon}).addTo(map);
+            
+            // Popup with site details
+            var popupContent = `
+                <div style="font-family: Arial; min-width: 200px;">
+                    <h3 style="margin: 5px 0; color: ${site.color};">${site.site_id}</h3>
+                    <table style="width: 100%; font-size: 14px;">
+                        <tr><td><b>Generation:</b></td><td>${site.generation}</td></tr>
+                        <tr><td><b>Signal:</b></td><td>${site.signal} dBm</td></tr>
+                        <tr><td><b>Coverage:</b></td><td>${site.coverage_km} km</td></tr>
+                        <tr><td><b>Active Users:</b></td><td>${site.connections}</td></tr>
+                        <tr><td><b>Throughput:</b></td><td>${site.throughput} Gbps</td></tr>
+                    </table>
+                </div>
+            `;
+            marker.bindPopup(popupContent);
+            circle.bindPopup(popupContent);
+        });
+        
+        // Add legend
+        var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend');
+            div.innerHTML = `
+                <h4>Network Generation</h4>
+                <div><i style="background: #ff0000"></i> 5G Sites</div>
+                <div><i style="background: #0080ff"></i> 4G/5G Sites</div>
+                <div><i style="background: #00ff00"></i> 4G Sites</div>
+                <br>
+                <small>Coverage areas shown as circles</small>
+            `;
+            return div;
+        };
+        legend.addTo(map);
+        
+        // Add a heatmap overlay simulation
+        var heatmapData = [];
+        networkSites.forEach(function(site) {
+            // Generate points around each site for heatmap effect
+            for (var i = 0; i < 50; i++) {
+                var lat = site.coords[0] + (Math.random() - 0.5) * 0.02;
+                var lng = site.coords[1] + (Math.random() - 0.5) * 0.02;
+                var intensity = Math.max(0, 1 - (Math.random() * 0.5));
+                
+                var heatCircle = L.circle([lat, lng], {
+                    radius: 100,
+                    stroke: false,
+                    fillColor: site.color,
+                    fillOpacity: intensity * 0.1
+                }).addTo(map);
+            }
+        });
+    </script>
+</body>
+</html>

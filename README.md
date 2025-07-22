@@ -145,6 +145,68 @@ const spectrumHeatmap = [
 - Interference pattern analysis
 - Drive test route optimization
 
+### 📸 Visualizing Network Coverage
+
+**Option 1: Interactive HTML Visualization**
+```bash
+# Generate interactive map
+python3 create_gis_visualization.py
+# Open telecom_gis_coverage_map.html in browser
+```
+
+**Option 2: Quick Web Preview**
+1. Copy the GeoJSON data from above
+2. Visit [geojson.io](http://geojson.io)
+3. Paste the data to see instant visualization
+
+**Option 3: Standalone HTML Demo**
+```html
+<!-- Save as network_coverage_demo.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>5G Network Coverage - bdstest</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map { height: 500px; }
+        .legend { background: white; padding: 10px; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([40.7428, -73.9875], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        
+        // Add network sites with coverage circles
+        var sites = [
+            {coords: [40.7128, -74.0059], id: "NYC001", gen: "5G", coverage: 2100, color: "red"},
+            {coords: [40.7484, -73.9857], id: "NYC002", gen: "4G/5G", coverage: 3800, color: "blue"},
+            {coords: [40.7831, -73.9712], id: "NYC003", gen: "5G", coverage: 2500, color: "red"}
+        ];
+        
+        sites.forEach(site => {
+            L.circle(site.coords, {
+                radius: site.coverage,
+                color: site.color,
+                fillOpacity: 0.2
+            }).addTo(map).bindPopup(`${site.id} - ${site.gen} Network`);
+            
+            L.marker(site.coords).addTo(map);
+        });
+    </script>
+</body>
+</html>
+```
+
+**What the Visualization Shows:**
+- 🔴 **Red Circles**: 5G network sites with coverage areas
+- 🔵 **Blue Circles**: 4G/5G hybrid sites  
+- 🟢 **Green Circles**: 4G-only sites
+- **Circle Size**: Coverage radius (2-4 km typical)
+- **Interactive Features**: Click sites for detailed metrics
+
 ## 📊 Network Operations Dashboard
 
 **Real-time Network Status**

@@ -1,0 +1,59 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "site_id": "NYC001", 
+        "generation": "5G",
+        "signal_strength_dbm": -75,
+        "coverage_radius_km": 2.1,
+        "active_connections": 1247,
+        "throughput_gbps": 1.2,
+        "marker-color": "#ff0000",
+        "marker-size": "large",
+        "marker-symbol": "5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.0059, 40.7128]
+      }
+    },
+    {
+      "type": "Feature", 
+      "properties": {
+        "site_id": "NYC002",
+        "generation": "4G/5G",
+        "signal_strength_dbm": -82,
+        "coverage_radius_km": 3.8,
+        "active_connections": 2156,
+        "throughput_gbps": 0.8,
+        "marker-color": "#0080ff",
+        "marker-size": "medium",
+        "marker-symbol": "4"
+      },
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [-73.9857, 40.7484]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "site_id": "NYC003",
+        "generation": "5G",
+        "signal_strength_dbm": -70,
+        "coverage_radius_km": 2.5,
+        "active_connections": 1850,
+        "throughput_gbps": 1.5,
+        "marker-color": "#ff0000",
+        "marker-size": "large",
+        "marker-symbol": "5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-73.9712, 40.7831]
+      }
+    }
+  ]
+}
