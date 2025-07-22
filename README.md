@@ -82,17 +82,74 @@ Machine learning algorithms identify optimization opportunities for antenna tilt
 - Material-UI (consistent telecom styling)
 - Chart.js (network performance visualization)
 - Leaflet maps (site location and technician tracking)
+- GeoJSON support for coverage overlays
+- Mapbox integration for drive test visualization
 
 **Monitoring & Analytics**
 - Prometheus (KPI collection)
 - Grafana (network operations dashboards)
 - TimescaleDB (time-series network data)
 
+## 🗺️ GIS (Geographic Information System) Integration
+
+**Sample GIS Data Visualization**
+```javascript
+// Sample network coverage heatmap data
+const networkCoverageData = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "site_id": "NYC001", 
+        "generation": "5G",
+        "signal_strength_dbm": -75,
+        "coverage_radius_km": 2.1,
+        "active_connections": 1247,
+        "throughput_gbps": 1.2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-74.0059, 40.7128]  // NYC coordinates
+      }
+    },
+    {
+      "type": "Feature", 
+      "properties": {
+        "site_id": "NYC002",
+        "generation": "4G/5G",
+        "signal_strength_dbm": -82,
+        "coverage_radius_km": 3.8,
+        "active_connections": 2156,
+        "throughput_gbps": 0.8
+      },
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [-73.9857, 40.7484]  // Times Square
+      }
+    }
+  ]
+}
+
+// Spectrum utilization heatmap
+const spectrumHeatmap = [
+  { lat: 40.7128, lng: -74.0059, intensity: 0.85, band: "n77_3.5GHz" },
+  { lat: 40.7484, lng: -73.9857, intensity: 0.72, band: "n77_3.5GHz" },
+  { lat: 40.7831, lng: -73.9712, intensity: 0.91, band: "n260_39GHz" }
+];
+```
+
+**Interactive Coverage Maps**
+- Real-time signal strength visualization
+- Network slice coverage overlays
+- Interference pattern analysis
+- Drive test route optimization
+
 ## 📊 Network Operations Dashboard
 
 **Real-time Network Status**
 - Live equipment health across all sites
-- Active alarms with severity classification
+- Active alarms with severity classification  
 - Ongoing maintenance tickets and technician locations
 - Network performance KPIs and SLA tracking
 

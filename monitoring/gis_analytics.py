@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-GSI Multi-Generation Network Analytics
-Comprehensive monitoring and analytics for 3G/4G/5G networks
+GIS (Geographic Information System) Network Analytics
+Comprehensive geospatial monitoring and analytics for 3G/4G/5G networks
 
 Author: bdstest
 """
@@ -24,8 +24,8 @@ class NetworkGenerationMetrics:
     error_rate_percent: float
     spectral_efficiency: float
 
-class GSIMultiGenAnalytics:
-    """Global System Infrastructure Multi-Generation Analytics"""
+class GISMultiGenAnalytics:
+    """Geographic Information System Multi-Generation Analytics"""
     
     def __init__(self):
         self.logger = logging.getLogger(__name__)
@@ -164,15 +164,15 @@ class GSIMultiGenAnalytics:
         return recommendations
 
 async def main():
-    """Main function for testing GSI analytics"""
-    analytics = GSIMultiGenAnalytics()
+    """Main function for testing GIS analytics"""
+    analytics = GISMultiGenAnalytics()
     
     # Test multi-generation metrics collection
     metrics_3g = await analytics.collect_3g_metrics()
     metrics_4g = await analytics.collect_4g_metrics()
     metrics_5g = await analytics.collect_5g_metrics()
     
-    print("GSI Multi-Generation Network Analytics")
+    print("GIS Multi-Generation Network Analytics")
     print("=" * 50)
     print(f"3G: {metrics_3g.throughput_mbps}Mbps, {metrics_3g.latency_ms}ms latency")
     print(f"4G: {metrics_4g.throughput_mbps}Mbps, {metrics_4g.latency_ms}ms latency")
